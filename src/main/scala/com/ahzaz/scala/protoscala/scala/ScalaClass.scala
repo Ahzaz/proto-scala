@@ -1,10 +1,15 @@
 package com.ahzaz.scala.protoscala.scala
 
+import com.ahzaz.scala.protoscala.scala.ScalaTypes.ScalaType
+
 /**
   * @author Ahzaz
   */
 case class Field(name: String, scalaType: ScalaType, defaultValue: Option[Any] = None) {
-  override def toString: String = s"$name: $scalaType" + defaultValue.map(v => s" = $v").getOrElse("")
+
+  lazy val fieldDefaultValue = if (defaultValue.isDefined) " = " + defaultValue.toString else ""
+
+  override def toString: String = s"$name: $scalaType $fieldDefaultValue"
 
   def builderString: String = s"""val ${name.underscored.toUpperCase}_FIELD = com.ahzaz.scala.protoscala.scala.Field("$name", ${scalaType.builderString}, $defaultValue)"""
 }
